@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "8XkTt+WhWXmh88svlZLe7d/uDZlndirxlrVfCbeLfI8=",
+  "Source": "McpServer",
+  "BasePath": "_content/McpServer",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
