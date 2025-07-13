@@ -43,6 +43,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "ModelContextProtocol": {
+              "target": "Package",
+              "version": "[0.3.0-preview.2, )"
+            },
             "NEST": {
               "target": "Package",
               "version": "[7.17.5, )"
