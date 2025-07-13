@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer", "McpServer\McpServer.csproj", "{ECD795E3-1513-4CC4-B538-E0FE1D0C2A89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.Tests", "McpServer.Tests\McpServer.Tests.csproj", "{67F11BE9-4AC3-40B9-835C-519B706E658E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailReader", "EmailReader\EmailReader.csproj", "{D606E83D-3B79-42AB-B118-0503E2FDA4F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailReader.Tests", "EmailReader.Tests\EmailReader.Tests.csproj", "{3C3FD8B8-BC4E-4290-8C0F-1D0ECFE6AF42}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECD795E3-1513-4CC4-B538-E0FE1D0C2A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECD795E3-1513-4CC4-B538-E0FE1D0C2A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECD795E3-1513-4CC4-B538-E0FE1D0C2A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECD795E3-1513-4CC4-B538-E0FE1D0C2A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67F11BE9-4AC3-40B9-835C-519B706E658E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67F11BE9-4AC3-40B9-835C-519B706E658E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67F11BE9-4AC3-40B9-835C-519B706E658E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67F11BE9-4AC3-40B9-835C-519B706E658E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D606E83D-3B79-42AB-B118-0503E2FDA4F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D606E83D-3B79-42AB-B118-0503E2FDA4F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D606E83D-3B79-42AB-B118-0503E2FDA4F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D606E83D-3B79-42AB-B118-0503E2FDA4F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C3FD8B8-BC4E-4290-8C0F-1D0ECFE6AF42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C3FD8B8-BC4E-4290-8C0F-1D0ECFE6AF42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C3FD8B8-BC4E-4290-8C0F-1D0ECFE6AF42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C3FD8B8-BC4E-4290-8C0F-1D0ECFE6AF42}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
