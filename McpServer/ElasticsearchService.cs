@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Elasticsearch.Net;
+using Elastic.Clients.Elasticsearch;
 using Microsoft.Extensions.Configuration;
-using Nest;
 
 namespace McpServer
 {
@@ -14,7 +13,8 @@ namespace McpServer
 
     public class ElasticsearchService : IElasticsearchService
     {
-        private readonly IElasticClient _client;
+        private readonly ElasticsearchClient _client;
+        private readonly string _defaultIndex;
 
         public ElasticsearchService(IConfiguration configuration)
         {
@@ -23,30 +23,28 @@ namespace McpServer
             {
                 throw new Exception("Elasticsearch URL is not configured.");
             }
-            var defaultIndex = configuration["Elasticsearch:DefaultIndex"];
+            _defaultIndex = configuration["Elasticsearch:DefaultIndex"];
 
-            var settings = new ConnectionSettings(new Uri(url))
-                .DefaultIndex(defaultIndex);
+            var settings = new ElasticsearchClientSettings(new Uri(url));
 
-            _client = new ElasticClient(settings);
+            _client = new ElasticsearchClient(settings);
         }
 
         // Add this constructor for testing purposes
-        public ElasticsearchService(IElasticClient client)
+        public ElasticsearchService(ElasticsearchClient client, string defaultIndex)
         {
             _client = client;
+            _defaultIndex = defaultIndex;
         }
 
         public virtual async Task<IEnumerable<Email>> SearchAsync(string query)
         {
             var searchResponse = await _client.SearchAsync<Email>(s => s
+                .Index(_defaultIndex)
                 .Query(q => q
                     .MultiMatch(m => m
                         .Query(query)
-                        .Fields(f => f
-                            .Field(p => p.Subject)
-                            .Field(p => p.Body)
-                        )
+                        .Fields("subject,body")
                     )
                 )
             );

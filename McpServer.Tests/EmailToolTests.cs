@@ -3,7 +3,6 @@ using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using McpServer.Tools;
-using Nest;
 
 namespace McpServer.Tests
 {
