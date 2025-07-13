@@ -1,25 +1,26 @@
-using System;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ModelContextProtocol;
+using McpServer.Tools;
+using System.Threading.Tasks;
 
 namespace McpServer
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
-        }
+            var builder = Host.CreateEmptyApplicationBuilder(settings: null);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            builder.Services.AddMcpServer()
+                .WithStdioServerTransport()
+                .WithToolsFromAssembly(typeof(Program).Assembly);
+
+            builder.Services.AddSingleton<ElasticsearchService>();
+
+            var app = builder.Build();
+
+            await app.RunAsync();
+        }
     }
 }

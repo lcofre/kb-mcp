@@ -28,3 +28,12 @@
 /app/McpServer/obj/Debug/net8.0/McpServer.pdb
 /app/McpServer/obj/Debug/net8.0/McpServer.genruntimeconfig.cache
 /app/McpServer/obj/Debug/net8.0/ref/McpServer.dll
+/app/McpServer/bin/Debug/net8.0/Microsoft.Extensions.AI.Abstractions.dll
+/app/McpServer/bin/Debug/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/app/McpServer/bin/Debug/net8.0/Microsoft.Extensions.Diagnostics.Abstractions.dll
+/app/McpServer/bin/Debug/net8.0/Microsoft.Extensions.Hosting.Abstractions.dll
+/app/McpServer/bin/Debug/net8.0/Microsoft.Extensions.Logging.Abstractions.dll
+/app/McpServer/bin/Debug/net8.0/Microsoft.Extensions.Options.dll
+/app/McpServer/bin/Debug/net8.0/ModelContextProtocol.dll
+/app/McpServer/bin/Debug/net8.0/ModelContextProtocol.Core.dll
+/app/McpServer/bin/Debug/net8.0/System.Net.ServerSentEvents.dll
