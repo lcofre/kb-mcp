@@ -7,9 +7,14 @@ using Nest;
 
 namespace McpServer
 {
-    public class ElasticsearchService
+    public interface IElasticsearchService
     {
-        private readonly ElasticClient _client;
+        Task<IEnumerable<Email>> SearchAsync(string query);
+    }
+
+    public class ElasticsearchService : IElasticsearchService
+    {
+        private readonly IElasticClient _client;
 
         public ElasticsearchService(IConfiguration configuration)
         {
@@ -26,7 +31,13 @@ namespace McpServer
             _client = new ElasticClient(settings);
         }
 
-        public async Task<IEnumerable<Email>> SearchAsync(string query)
+        // Add this constructor for testing purposes
+        public ElasticsearchService(IElasticClient client)
+        {
+            _client = client;
+        }
+
+        public virtual async Task<IEnumerable<Email>> SearchAsync(string query)
         {
             var searchResponse = await _client.SearchAsync<Email>(s => s
                 .Query(q => q

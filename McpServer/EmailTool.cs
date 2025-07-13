@@ -7,9 +7,9 @@ namespace McpServer.Tools
     [McpServerToolType]
     public class EmailTool
     {
-        private readonly ElasticsearchService _elasticsearchService;
+        private readonly IElasticsearchService _elasticsearchService;
 
-        public EmailTool(ElasticsearchService elasticsearchService)
+        public EmailTool(IElasticsearchService elasticsearchService)
         {
             _elasticsearchService = elasticsearchService;
         }
