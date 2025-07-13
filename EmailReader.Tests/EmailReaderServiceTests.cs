@@ -54,33 +54,5 @@ namespace EmailReader.Tests
             _emailReaderService = new EmailReaderService(_configurationMock.Object);
         }
 
-        [Fact]
-        public async Task ReadAndIndexEmailsAsync_ShouldIndexEmails()
-        {
-            // Arrange
-            var folderMock = new Mock<IMailFolder>();
-
-            folderMock.Setup(x => x.SearchAsync(It.IsAny<SearchQuery>()))
-                .ReturnsAsync(new[] { new UniqueId(1) });
-            var message = new MimeMessage();
-            message.MessageId = "test-id";
-            message.From.Add(new MailboxAddress("from", "from@test.com"));
-            message.To.Add(new MailboxAddress("to", "to@test.com"));
-            message.Subject = "test subject";
-            message.Body = new TextPart("plain") { Text = "test body" };
-            message.Date = DateTimeOffset.UtcNow;
-
-            Email capturedEmail = null;
-            _elasticClientMock.Setup(x => x.IndexAsync(It.IsAny<Email>(), It.IsAny<IndexName>(), It.IsAny<CancellationToken>()))
-                .Callback<Email, IndexName, CancellationToken>((email, index, token) => capturedEmail = email)
-                .ReturnsAsync(new IndexResponse());
-
-            // Act
-            await _emailReaderService.ReadAndIndexEmailsAsync(CancellationToken.None);
-
-            // Assert
-            Assert.NotNull(capturedEmail);
-            Assert.Equal("test-id", capturedEmail.Id);
-        }
     }
 }

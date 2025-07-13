@@ -10,8 +10,6 @@
 /app/McpServer/bin/Debug/net8.0/McpServer.runtimeconfig.json
 /app/McpServer/bin/Debug/net8.0/McpServer.dll
 /app/McpServer/bin/Debug/net8.0/McpServer.pdb
-/app/McpServer/bin/Debug/net8.0/Elasticsearch.Net.dll
-/app/McpServer/bin/Debug/net8.0/Nest.dll
 /app/McpServer/bin/Debug/net8.0/Newtonsoft.Json.dll
 /app/McpServer/obj/Debug/net8.0/McpServer.MvcApplicationPartsAssemblyInfo.cache
 /app/McpServer/obj/Debug/net8.0/staticwebassets.build.json
@@ -37,3 +35,5 @@
 /app/McpServer/bin/Debug/net8.0/ModelContextProtocol.dll
 /app/McpServer/bin/Debug/net8.0/ModelContextProtocol.Core.dll
 /app/McpServer/bin/Debug/net8.0/System.Net.ServerSentEvents.dll
+/app/McpServer/bin/Debug/net8.0/Elastic.Clients.Elasticsearch.dll
+/app/McpServer/bin/Debug/net8.0/Elastic.Transport.dll
