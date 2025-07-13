@@ -16,7 +16,7 @@ namespace McpServer
                 .WithStdioServerTransport()
                 .WithToolsFromAssembly(typeof(Program).Assembly);
 
-            builder.Services.AddSingleton<ElasticsearchService>();
+            builder.Services.AddSingleton<IElasticsearchService, ElasticsearchService>();
 
             var app = builder.Build();
 
