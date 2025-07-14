@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace EmailReader
 {
@@ -16,7 +17,12 @@ namespace EmailReader
                 .AddEnvironmentVariables()
                 .Build();
 
-            var emailReaderService = new EmailReaderService(configuration);
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            });
+            var logger = loggerFactory.CreateLogger<EmailReaderService>();
+            var emailReaderService = new EmailReaderService(configuration, logger);
             await emailReaderService.ReadAndIndexEmailsAsync(CancellationToken.None);
         }
     }

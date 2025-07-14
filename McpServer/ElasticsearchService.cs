@@ -14,7 +14,7 @@ namespace McpServer
     public class ElasticsearchService : IElasticsearchService
     {
         private readonly ElasticsearchClient _client;
-        private readonly string _defaultIndex;
+        private readonly string? _defaultIndex;
 
         public ElasticsearchService(IConfiguration configuration)
         {
@@ -39,6 +39,10 @@ namespace McpServer
 
         public virtual async Task<IEnumerable<Email>> SearchAsync(string query)
         {
+            if (string.IsNullOrEmpty(_defaultIndex))
+            {
+                return new List<Email>();
+            }
             var searchResponse = await _client.SearchAsync<Email>(s => s
                 .Index(_defaultIndex)
                 .Query(q => q
