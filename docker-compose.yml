@@ -15,10 +15,17 @@ services:
       - mcp-net
 
   elasticsearch:
-    image: elasticsearch:8.14.3
+    image: elasticsearch:9.0.3
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+        reservations:
+          memory: 512m
     ports:
       - "9200:9200"
     volumes:

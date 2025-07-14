@@ -1,9 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using ModelContextProtocol;
-using McpServer.Tools;
-using System.Threading.Tasks;
-
 namespace McpServer
 {
     public class Program

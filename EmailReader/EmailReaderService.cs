@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Elastic.Clients.Elasticsearch;
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MimeKit;
 
 namespace EmailReader
 {
@@ -59,7 +52,12 @@ namespace EmailReader
 
             foreach (var folderName in _folders)
             {
-                var folder = _imapClient.GetFolder(folderName);
+                var folderParts = folderName.Split('/');
+                var folder = _imapClient.GetFolder(folderParts[0]);
+                foreach (var part in folderParts.Skip(1))
+                {
+                    folder = folder.GetSubfolder(part);
+                }
                 if (folder == null)
                 {
                     _logger.LogWarning($"Folder {folderName} not found.");

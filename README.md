@@ -62,7 +62,7 @@ export Imap__Port="your-imap-port"
 export Imap__UseSsl="true"
 export Imap__Username="your-imap-username"
 export Imap__Password="your-imap-password"
-export Imap__Folders__0="Inbox"
+export Imap__Folders__0="Inbox/Some Subfolder"
 export Elasticsearch__Url="http://localhost:9200"
 ```
 

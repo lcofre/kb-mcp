@@ -1,11 +1,5 @@
-using Xunit;
 using Moq;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Elastic.Clients.Elasticsearch;
-using System.Linq;
 
 namespace McpServer.Tests
 {

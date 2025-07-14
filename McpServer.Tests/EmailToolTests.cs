@@ -1,7 +1,4 @@
-using Xunit;
 using Moq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using McpServer.Tools;
 
 namespace McpServer.Tests

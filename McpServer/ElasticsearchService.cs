@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Elastic.Clients.Elasticsearch;
-using Microsoft.Extensions.Configuration;
 
 namespace McpServer
 {

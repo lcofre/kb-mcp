@@ -1,6 +1,5 @@
 using ModelContextProtocol.Server;
 using System.ComponentModel;
-using System.Threading.Tasks;
 
 namespace McpServer.Tools
 {
