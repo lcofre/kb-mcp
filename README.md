@@ -47,7 +47,7 @@ You will need to add the following to your VS Code settings:
 ```json
 "copilot.mcp.servers": {
     "my-local-mcp-server": {
-        "url": "http://localhost:5000"
+        "url": "http://localhost:8080"
     }
 }
 ```
