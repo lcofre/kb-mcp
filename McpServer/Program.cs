@@ -4,15 +4,28 @@ namespace McpServer
     {
         public static async Task Main(string[] args)
         {
-            var builder = Host.CreateEmptyApplicationBuilder(settings: null);
+            var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddMcpServer()
-                .WithStdioServerTransport()
-                .WithToolsFromAssembly(typeof(Program).Assembly);
+                .WithHttpTransport()
+                .WithToolsFromAssembly();
 
             builder.Services.AddSingleton<IElasticsearchService, ElasticsearchService>();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
+
+            app.MapMcp("api/mcp");
+            app.UseCors();
 
             await app.RunAsync();
         }

@@ -1,0 +1,7 @@
+{
+    "servers": {
+        "knowledgebase-search-emails": {
+            "url": "http://localhost:5000/api/mcp"
+        }
+    }
+}

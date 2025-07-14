@@ -27,14 +27,14 @@ docker-compose up
 
 ### Add Local MCP Server to VS Code for GitHub Copilot
 
-To add the local MCP server to VS Code, follow the instructions here: https://code.visualstudio.com/docs/copilot/chat/mcp-servers
-
-Add the following to your VS Code settings:
+To add the local MCP server to VS Code, create the file `.vscode/mcp.json` in your workspace or user settings:
 
 ```json
-"copilot.mcp.servers": {
-    "knowledgebase-mcp-server": {
-        "url": "http://localhost:8080"
+{
+    "servers": {
+        "knowledgebase-search-emails": {
+            "url": "http://localhost:5000/api/mcp"
+        }
     }
 }
 ```
