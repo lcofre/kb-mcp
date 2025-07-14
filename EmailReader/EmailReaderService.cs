@@ -4,17 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Elastic.Clients.Elasticsearch;
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Search;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 
 namespace EmailReader
@@ -24,9 +19,11 @@ namespace EmailReader
         private readonly IImapClient _imapClient;
         private readonly ElasticsearchClient? _elasticClient;
         private readonly string[]? _folders;
+        private readonly ILogger<EmailReaderService> _logger;
 
-        public EmailReaderService(IConfiguration configuration)
+        public EmailReaderService(IConfiguration configuration, ILogger<EmailReaderService> logger)
         {
+            _logger = logger;
             var host = configuration["Imap:Host"];
             var portValue = configuration["Imap:Port"];
             var port = !string.IsNullOrEmpty(portValue) ? int.Parse(portValue) : 993;
@@ -63,6 +60,11 @@ namespace EmailReader
             foreach (var folderName in _folders)
             {
                 var folder = _imapClient.GetFolder(folderName);
+                if (folder == null)
+                {
+                    _logger.LogWarning($"Folder {folderName} not found.");
+                    continue;
+                }
                 await folder.OpenAsync(FolderAccess.ReadOnly, cancellationToken);
 
                 var uids = await folder.SearchAsync(SearchQuery.All, cancellationToken);
