@@ -14,6 +14,18 @@ services:
     networks:
       - mcp-net
 
+  email-reader:
+    build:
+      context: .
+      dockerfile: EmailReader/Dockerfile
+    environment:
+      - Elasticsearch__Url=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - mcp-net
+    restart: "no"
+
   elasticsearch:
     image: elasticsearch:9.0.3
     environment:
