@@ -1,6 +1,6 @@
 # Email Reader and MCP Server
 
-This repository contains two main projects: an Email Reader service and a Model Context Protocol (MCP) server for knowledge base integration.
+This repository contains two main projects: an Email Reader service and a Model Context Protocol (MCP) server for knowledge base integration. When run with `docker-compose`, these services will retrieve emails from your inbox of choice (using IMAP) and will store them in Elasticsearch for querying by the McpServer.
 
 ## Technologies Used
 
@@ -9,6 +9,22 @@ This repository contains two main projects: an Email Reader service and a Model 
 - MailKit (for retrieving emails via IMAP)
 - Model Context Protocol (MCP) for server-client integration (tested with GitHub Copilot)
 - xUnit (for unit testing)
+
+## Architecture
+
+```mermaid
+graph LR
+    subgraph "Docker Compose Services"
+        EmailReader
+        Elasticsearch
+        McpServer
+    end
+
+    Inboxes["Inbox(es)"] --> EmailReader
+    EmailReader -- stores --> Elasticsearch
+    McpServer -- queries --> Elasticsearch
+    GitHubCopilot["GitHub Copilot (Agent)"] -- connects to --> McpServer
+```
 
 ## How to Run
 
@@ -97,3 +113,5 @@ The MCP server requires:
 
 - `Elasticsearch:Url` - Elasticsearch server URL
 - `Elasticsearch:DefaultIndex` - Default index for email searches
+
+These configuration settings are set to the correct values when running with `docker-compose`.
