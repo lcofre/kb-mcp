@@ -11,5 +11,6 @@ namespace EmailReader
         public string? Body { get; set; }
         public DateTime Date { get; set; }
         public string[]? Attachments { get; set; }
+        public string? Inbox { get; set; }
     }
 }

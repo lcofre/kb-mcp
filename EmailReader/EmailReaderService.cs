@@ -77,7 +77,8 @@ namespace EmailReader
                             Subject = message.Subject,
                             Body = message.TextBody,
                             Date = message.Date.UtcDateTime,
-                            Attachments = message.Attachments.Select(a => a.ContentDisposition?.FileName ?? "unknown").ToArray()
+                            Attachments = message.Attachments.Select(a => a.ContentDisposition?.FileName ?? "unknown").ToArray(),
+                            Inbox = imapConfig.Username
                         };
 
                         await _elasticClient.IndexAsync(email, "emails", email.Id, cancellationToken);
