@@ -10,6 +10,7 @@
         "dependencies": {
           "Elastic.Clients.Elasticsearch": "8.14.3",
           "ModelContextProtocol": "0.3.0-preview.2",
+          "ModelContextProtocol.AspNetCore": "0.3.0-preview.2",
           "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
@@ -119,6 +120,17 @@
         },
         "runtime": {
           "lib/net8.0/ModelContextProtocol.dll": {
+            "assemblyVersion": "0.3.0.0",
+            "fileVersion": "0.3.0.0"
+          }
+        }
+      },
+      "ModelContextProtocol.AspNetCore/0.3.0-preview.2": {
+        "dependencies": {
+          "ModelContextProtocol": "0.3.0-preview.2"
+        },
+        "runtime": {
+          "lib/net8.0/ModelContextProtocol.AspNetCore.dll": {
             "assemblyVersion": "0.3.0.0",
             "fileVersion": "0.3.0.0"
           }
@@ -246,6 +258,13 @@
       "sha512": "sha512-tC4pwKzNPFXFqyqhAcq40QnkSF+md29UKGsaDkF9Pw8oinWqFoC3Nr9AF+YbpIWo8Jc6Nz9S7+LuJwqpZWfLOw==",
       "path": "modelcontextprotocol/0.3.0-preview.2",
       "hashPath": "modelcontextprotocol.0.3.0-preview.2.nupkg.sha512"
+    },
+    "ModelContextProtocol.AspNetCore/0.3.0-preview.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YJPTc8UbPOfscs+2xyhwKgw80It17ymxNzupjv4FvM4fPTGQtaKszbgNdzyt3LMUrwX3MUhxWTJtoSHnqji3zA==",
+      "path": "modelcontextprotocol.aspnetcore/0.3.0-preview.2",
+      "hashPath": "modelcontextprotocol.aspnetcore.0.3.0-preview.2.nupkg.sha512"
     },
     "ModelContextProtocol.Core/0.3.0-preview.2": {
       "type": "package",
