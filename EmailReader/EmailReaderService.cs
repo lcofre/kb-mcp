@@ -9,30 +9,16 @@ namespace EmailReader
 {
     public class EmailReaderService
     {
-        private readonly IImapClient _imapClient;
         private readonly ElasticsearchClient? _elasticClient;
-        private readonly string[]? _folders;
         private readonly ILogger<EmailReaderService> _logger;
+        private readonly IConfiguration _configuration;
+        private readonly IImapClientFactory _imapClientFactory;
 
-        public EmailReaderService(IConfiguration configuration, ILogger<EmailReaderService> logger)
+        public EmailReaderService(IConfiguration configuration, ILogger<EmailReaderService> logger, IImapClientFactory imapClientFactory = null)
         {
             _logger = logger;
-            var host = configuration["Imap:Host"];
-            var portValue = configuration["Imap:Port"];
-            var port = !string.IsNullOrEmpty(portValue) ? int.Parse(portValue) : 993;
-            var useSslValue = configuration["Imap:UseSsl"];
-            var useSsl = !string.IsNullOrEmpty(useSslValue) ? bool.Parse(useSslValue) : true;
-            var username = configuration["Imap:Username"];
-            var password = configuration["Imap:Password"];
-            _folders = configuration.GetSection("Imap:Folders").Get<string[]>();
-
-            _imapClient = new ImapClient();
-            if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
-            {
-                _imapClient.Connect(host, port, useSsl);
-                _imapClient.Authenticate(username, password);
-            }
-
+            _configuration = configuration;
+            _imapClientFactory = imapClientFactory ?? new ImapClientFactory();
 
             var elasticUrl = configuration["Elasticsearch:Url"];
             if (!string.IsNullOrEmpty(elasticUrl))
@@ -44,45 +30,58 @@ namespace EmailReader
 
         public async Task ReadAndIndexEmailsAsync(CancellationToken cancellationToken)
         {
-            if (_elasticClient == null || _imapClient == null || _folders == null)
+            if (_elasticClient == null)
             {
                 return;
             }
+            var imapConfigs = _configuration.GetSection("Imap").Get<ImapConfig[]>();
+            if (imapConfigs == null)
+            {
+                return;
+            }
+
             await CreateIndexTemplateAsync(cancellationToken);
 
-            foreach (var folderName in _folders)
+            foreach (var imapConfig in imapConfigs)
             {
-                var folderParts = folderName.Split('/');
-                var folder = _imapClient.GetFolder(folderParts[0]);
-                foreach (var part in folderParts.Skip(1))
+                using var imapClient = _imapClientFactory.CreateImapClient();
+                if (string.IsNullOrEmpty(imapConfig.Host) || string.IsNullOrEmpty(imapConfig.Username) || string.IsNullOrEmpty(imapConfig.Password))
                 {
-                    folder = folder.GetSubfolder(part);
-                }
-                if (folder == null)
-                {
-                    _logger.LogWarning($"Folder {folderName} not found.");
                     continue;
                 }
-                await folder.OpenAsync(FolderAccess.ReadOnly, cancellationToken);
 
-                var uids = await folder.SearchAsync(SearchQuery.All, cancellationToken);
-                foreach (var uid in uids)
+                await imapClient.ConnectAsync(imapConfig.Host, imapConfig.Port, imapConfig.UseSsl, cancellationToken);
+                await imapClient.AuthenticateAsync(imapConfig.Username, imapConfig.Password, cancellationToken);
+
+                foreach (var folderName in imapConfig.Folders)
                 {
-                    var message = await folder.GetMessageAsync(uid, cancellationToken);
-                    var email = new Email
+                    var folder = await imapClient.GetFolderAsync(folderName, cancellationToken);
+                    if (folder == null)
                     {
-                        Id = message.MessageId,
-                        From = message.From.Mailboxes.Select(m => m.Address).ToArray(),
-                        To = message.To.Mailboxes.Select(m => m.Address).ToArray(),
-                        Cc = message.Cc.Mailboxes.Select(m => m.Address).ToArray(),
-                        Bcc = message.Bcc.Mailboxes.Select(m => m.Address).ToArray(),
-                        Subject = message.Subject,
-                        Body = message.TextBody,
-                        Date = message.Date.UtcDateTime,
-                        Attachments = message.Attachments.Select(a => a.ContentDisposition?.FileName ?? "unknown").ToArray()
-                    };
+                        _logger.LogWarning($"Folder {folderName} not found.");
+                        continue;
+                    }
+                    await folder.OpenAsync(FolderAccess.ReadOnly, cancellationToken);
 
-                    await _elasticClient.IndexAsync(email, "emails", email.Id, cancellationToken);
+                    var uids = await folder.SearchAsync(SearchQuery.All, cancellationToken);
+                    foreach (var uid in uids)
+                    {
+                        var message = await folder.GetMessageAsync(uid, cancellationToken);
+                        var email = new Email
+                        {
+                            Id = message.MessageId,
+                            From = message.From.Mailboxes.Select(m => m.Address).ToArray(),
+                            To = message.To.Mailboxes.Select(m => m.Address).ToArray(),
+                            Cc = message.Cc.Mailboxes.Select(m => m.Address).ToArray(),
+                            Bcc = message.Bcc.Mailboxes.Select(m => m.Address).ToArray(),
+                            Subject = message.Subject,
+                            Body = message.TextBody,
+                            Date = message.Date.UtcDateTime,
+                            Attachments = message.Attachments.Select(a => a.ContentDisposition?.FileName ?? "unknown").ToArray()
+                        };
+
+                        await _elasticClient.IndexAsync(email, "emails", email.Id, cancellationToken);
+                    }
                 }
             }
         }

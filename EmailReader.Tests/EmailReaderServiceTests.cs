@@ -173,25 +173,41 @@ namespace EmailReader.Tests
         }
 
         [Fact]
-        public async Task ReadAndIndexEmailsAsync_ShouldReturnEarly_WhenImapClientNotConnected()
+        public async Task ReadAndIndexEmailsAsync_ShouldProcessMultipleAccounts()
         {
-            // Arrange - IMAP client exists but not connected due to missing credentials
+            // Arrange
             var configData = new Dictionary<string, string?>
             {
-                ["Elasticsearch:Url"] = "http://localhost:9200",
-                ["Imap:Folders:0"] = "INBOX",
-                ["Imap:Host"] = "example.com" // Host but no username/password
+                { "Imap:0:Host", "host1" },
+                { "Imap:0:Username", "user1" },
+                { "Imap:0:Password", "pass1" },
+                { "Imap:0:Folders:0", "Inbox" },
+                { "Imap:1:Host", "host2" },
+                { "Imap:1:Username", "user2" },
+                { "Imap:1:Password", "pass2" },
+                { "Imap:1:Folders:0", "Sent" },
+                { "Elasticsearch:Url", "http://localhost:9200" }
             };
+            var configuration = new ConfigurationBuilder().AddInMemoryCollection(configData).Build();
 
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(configData)
-                .Build();
+            var mockImapClient = new Mock<MailKit.Net.Imap.IImapClient>();
+            mockImapClient.Setup(x => x.ConnectAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            mockImapClient.Setup(x => x.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            mockImapClient.Setup(x => x.GetFolderAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult<MailKit.IMailFolder>(null));
 
-            var service = new EmailReaderService(configuration, _mockLogger.Object);
+            var mockImapClientFactory = new Mock<IImapClientFactory>();
+            mockImapClientFactory.Setup(x => x.CreateImapClient()).Returns(mockImapClient.Object);
 
-            // Act & Assert - Should throw ServiceNotConnectedException
-            await Assert.ThrowsAsync<MailKit.ServiceNotConnectedException>(
-                () => service.ReadAndIndexEmailsAsync(CancellationToken.None));
+            var service = new EmailReaderService(configuration, _mockLogger.Object, mockImapClientFactory.Object);
+
+            // Act
+            await service.ReadAndIndexEmailsAsync(CancellationToken.None);
+
+            // Assert
+            mockImapClientFactory.Verify(x => x.CreateImapClient(), Times.Exactly(2));
         }
     }
 }
