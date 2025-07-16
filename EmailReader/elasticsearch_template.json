@@ -64,6 +64,9 @@
       },
       "attachments": {
         "type": "text"
+      },
+      "inbox": {
+        "type": "keyword"
       }
     }
   }
