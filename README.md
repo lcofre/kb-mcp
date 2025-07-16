@@ -2,15 +2,7 @@
 
 This repository contains two main projects: an Email Reader service and a Model Context Protocol (MCP) server for knowledge base integration. When run with `docker-compose`, these services will retrieve emails from your inbox of choice (using IMAP) and will store them in Elasticsearch for querying by the McpServer.
 
-## Technologies Used
-
-- .NET 9 (C#)
-- Elasticsearch 9.0.3 (for storing and searching email content)
-- MailKit (for retrieving emails via IMAP)
-- Model Context Protocol (MCP) for server-client integration (tested with GitHub Copilot)
-- xUnit (for unit testing)
-
-## Architecture
+## Overview
 
 ```mermaid
 graph LR
@@ -55,27 +47,6 @@ To add the local MCP server to VS Code, create the file `.vscode/mcp.json` in yo
 }
 ```
 
-### Run Email Reader
-
-To run the Email Reader service, either modify `EmailReader/appsettings.json` or set the required environment variables:
-
-```bash
-export Imap__Host="your-imap-host"
-export Imap__Port="993"
-export Imap__UseSsl="true"
-export Imap__Username="your-imap-username"
-export Imap__Password="your-imap-password"
-export Imap__Folders__0="INBOX"
-export Imap__Folders__1="Sent"
-export Elasticsearch__Url="http://localhost:9200"
-```
-
-Then run the service:
-
-```bash
-dotnet run --project EmailReader/EmailReader.csproj
-```
-
 ## Project Structure
 
 ### EmailReader
@@ -107,11 +78,27 @@ The EmailReader service requires the following configuration:
 - `Imap:Folders` - Array of folder paths to process
 - `Elasticsearch:Url` - Elasticsearch server URL
 
+Alternatively you can add them to the `docker-compose.yml` file like this:
+
+```yaml
+...
+    environment:
+      - Elasticsearch__Url=http://elasticsearch:9200
+      - Imap__0__Host=imap.example.com
+...
+```
+
 ### MCP Server Configuration
 
-The MCP server requires:
+These configuration settings are set to the correct values when running with `docker-compose`:
 
 - `Elasticsearch:Url` - Elasticsearch server URL
 - `Elasticsearch:DefaultIndex` - Default index for email searches
 
-These configuration settings are set to the correct values when running with `docker-compose`.
+## Technologies Used
+
+- .NET 9 (C#)
+- Elasticsearch 9.0.3 (for storing and searching email content)
+- MailKit (for retrieving emails via IMAP)
+- Model Context Protocol (MCP) for server-client integration (tested with GitHub Copilot)
+- xUnit (for unit testing)
