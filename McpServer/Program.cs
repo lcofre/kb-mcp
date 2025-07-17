@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+
 namespace McpServer
 {
     public class Program
@@ -21,6 +23,9 @@ namespace McpServer
                           .AllowAnyMethod();
                 });
             });
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
 
             var app = builder.Build();
 
