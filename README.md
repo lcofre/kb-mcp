@@ -1,6 +1,8 @@
 # Email Reader and MCP Server
 
-This repository contains two main projects: an Email Reader service and a Model Context Protocol (MCP) server for knowledge base integration. When run with `docker-compose`, these services will retrieve emails from your inbox of choice (using IMAP) and will store them in Elasticsearch for querying by the McpServer.
+This repository contains two main projects: an Email Reader service and a Model Context Protocol (MCP) server for
+knowledge base integration. When run with `docker-compose`, these services will retrieve emails from your inbox of
+choice (using IMAP) and will store them in Elasticsearch for querying by the McpServer.
 
 ## Overview
 
@@ -25,9 +27,31 @@ graph LR
 - .NET 9 SDK
 - Docker and Docker Compose
 
+### Email Reader Configuration
+
+The EmailReader service requires the following configuration in `EmailReader/appsettings.json`:
+
+- `Imap:Host` - IMAP server hostname
+- `Imap:Port` - IMAP server port (default: 993)
+- `Imap:UseSsl` - Use SSL/TLS (default: true)
+- `Imap:Username` - IMAP username
+- `Imap:Password` - IMAP password
+- `Imap:Folders` - Array of folder paths to process. Add sub-folders with `/`, e.g. `Inbox/Important Emails`
+
+Alternatively you can add them to the `docker-compose.yml` file like this:
+
+```yaml
+  email-reader:
+...
+    environment:
+      - Elasticsearch__Url=http://elasticsearch:9200
+      - Imap__0__Host=imap.example.com
+...
+```
+
 ### Docker Compose
 
-To run the solution locally, use Docker Compose. This will start both the MCP server and an Elasticsearch instance:
+To run the projects locally, use Docker Compose. This will start both the MCP server and an Elasticsearch instance:
 
 ```bash
 docker-compose up
@@ -63,37 +87,6 @@ To add the local MCP server to VS Code, create the file `.vscode/mcp.json` in yo
 
 ### EmailReader.Tests and McpServer.Tests
 Unit tests
-
-## Configuration
-
-### Email Reader Configuration
-
-The EmailReader service requires the following configuration:
-
-- `Imap:Host` - IMAP server hostname
-- `Imap:Port` - IMAP server port (default: 993)
-- `Imap:UseSsl` - Use SSL/TLS (default: true)
-- `Imap:Username` - IMAP username
-- `Imap:Password` - IMAP password
-- `Imap:Folders` - Array of folder paths to process
-- `Elasticsearch:Url` - Elasticsearch server URL
-
-Alternatively you can add them to the `docker-compose.yml` file like this:
-
-```yaml
-...
-    environment:
-      - Elasticsearch__Url=http://elasticsearch:9200
-      - Imap__0__Host=imap.example.com
-...
-```
-
-### MCP Server Configuration
-
-These configuration settings are set to the correct values when running with `docker-compose`:
-
-- `Elasticsearch:Url` - Elasticsearch server URL
-- `Elasticsearch:DefaultIndex` - Default index for email searches
 
 ## Technologies Used
 

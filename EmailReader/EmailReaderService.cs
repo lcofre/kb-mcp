@@ -55,7 +55,12 @@ namespace EmailReader
 
                 foreach (var folderName in imapConfig.Folders)
                 {
-                    var folder = await imapClient.GetFolderAsync(folderName, cancellationToken);
+                    var folderSplit = folderName.Split('/');
+                    var folder = await imapClient.GetFolderAsync(folderSplit[0], cancellationToken);
+                    foreach (var subfolder in folderSplit.Skip(1))
+                    {
+                        folder = folder.GetSubfolder(subfolder);
+                    }
                     if (folder == null)
                     {
                         _logger.LogWarning($"Folder {folderName} not found.");
