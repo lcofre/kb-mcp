@@ -1,17 +1,20 @@
 using Moq;
 using McpServer.Tools;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Tests
 {
     public class EmailToolTests
     {
         private readonly Mock<IElasticsearchService> _mockElasticsearchService;
+        private readonly Mock<ILogger<EmailTool>> _mockLogger;
         private readonly EmailTool _emailTool;
 
         public EmailToolTests()
         {
             _mockElasticsearchService = new Mock<IElasticsearchService>();
-            _emailTool = new EmailTool(_mockElasticsearchService.Object);
+            _mockLogger = new Mock<ILogger<EmailTool>>();
+            _emailTool = new EmailTool(_mockElasticsearchService.Object, _mockLogger.Object);
         }
 
         [Fact]

@@ -65,7 +65,7 @@ To add the local MCP server to VS Code, create the file `.vscode/mcp.json` in yo
 {
     "servers": {
         "knowledgebase-search-emails": {
-            "url": "http://localhost:5000/api/mcp"
+            "url": "http://localhost:5139/api/mcp"
         }
     }
 }

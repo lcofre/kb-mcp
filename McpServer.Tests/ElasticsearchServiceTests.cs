@@ -1,16 +1,19 @@
 using Moq;
 using Microsoft.Extensions.Configuration;
 using Elastic.Clients.Elasticsearch;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Tests
 {
     public class ElasticsearchServiceTests
     {
         private readonly Mock<IConfiguration> _mockConfiguration;
+        private readonly Mock<ILogger<ElasticsearchService>> _mockLogger;
 
         public ElasticsearchServiceTests()
         {
             _mockConfiguration = new Mock<IConfiguration>();
+            _mockLogger = new Mock<ILogger<ElasticsearchService>>();
         }
 
         [Fact]
@@ -20,7 +23,7 @@ namespace McpServer.Tests
             _mockConfiguration.Setup(c => c["Elasticsearch:Url"]).Returns((string)null);
 
             // Act & Assert
-            Assert.Throws<Exception>(() => new ElasticsearchService(_mockConfiguration.Object));
+            Assert.Throws<Exception>(() => new ElasticsearchService(_mockConfiguration.Object, _mockLogger.Object));
         }
 
         [Fact]
@@ -30,7 +33,7 @@ namespace McpServer.Tests
             _mockConfiguration.Setup(c => c["Elasticsearch:Url"]).Returns("");
 
             // Act & Assert
-            Assert.Throws<Exception>(() => new ElasticsearchService(_mockConfiguration.Object));
+            Assert.Throws<Exception>(() => new ElasticsearchService(_mockConfiguration.Object, _mockLogger.Object));
         }
 
         [Fact]
@@ -41,7 +44,7 @@ namespace McpServer.Tests
             _mockConfiguration.Setup(c => c["Elasticsearch:DefaultIndex"]).Returns("emails");
 
             // Act
-            var service = new ElasticsearchService(_mockConfiguration.Object);
+            var service = new ElasticsearchService(_mockConfiguration.Object, _mockLogger.Object);
 
             // Assert
             Assert.NotNull(service);
@@ -55,7 +58,7 @@ namespace McpServer.Tests
             var defaultIndex = "test-index";
 
             // Act
-            var service = new ElasticsearchService(mockClient.Object, defaultIndex);
+            var service = new ElasticsearchService(mockClient.Object, defaultIndex, _mockLogger.Object);
 
             // Assert
             Assert.NotNull(service);
@@ -66,7 +69,7 @@ namespace McpServer.Tests
         {
             // Arrange
             var mockClient = new Mock<ElasticsearchClient>();
-            var service = new ElasticsearchService(mockClient.Object, string.Empty);
+            var service = new ElasticsearchService(mockClient.Object, string.Empty, _mockLogger.Object);
 
             // Act
             var result = await service.SearchAsync("test query");
@@ -81,7 +84,7 @@ namespace McpServer.Tests
         {
             // Arrange
             var mockClient = new Mock<ElasticsearchClient>();
-            var service = new ElasticsearchService(mockClient.Object, "");
+            var service = new ElasticsearchService(mockClient.Object, "", _mockLogger.Object);
 
             // Act
             var result = await service.SearchAsync("test query");

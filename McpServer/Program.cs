@@ -8,7 +8,8 @@ namespace McpServer
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddMcpServer()
+            builder.Services
+                .AddMcpServer()
                 .WithHttpTransport()
                 .WithToolsFromAssembly();
 
@@ -23,9 +24,6 @@ namespace McpServer
                           .AllowAnyMethod();
                 });
             });
-
-            builder.Logging.ClearProviders();
-            builder.Logging.AddConsole();
 
             var app = builder.Build();
 

@@ -5,9 +5,9 @@ services:
       context: .
       dockerfile: McpServer/Dockerfile
     ports:
-      - "5000:5000"
+      - "5139:5139"
     environment:
-      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_URLS=http://+:5139
       - Elasticsearch__Url=http://elasticsearch:9200
     depends_on:
       - elasticsearch

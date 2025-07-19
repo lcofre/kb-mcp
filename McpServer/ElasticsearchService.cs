@@ -49,7 +49,7 @@ namespace McpServer
             try
             {
                 var searchResponse = await _client.SearchAsync<Email>(s => s
-                    .Index(_defaultIndex)
+                    .Indices(_defaultIndex)
                     .Query(q => q
                         .MultiMatch(m => m
                             .Query(query)
@@ -76,9 +76,4 @@ namespace McpServer
         }
     }
 
-    public class Email
-    {
-        public string? Subject { get; set; }
-        public string? Body { get; set; }
-    }
 }
