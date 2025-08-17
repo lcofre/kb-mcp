@@ -1,0 +1,2 @@
+- Always translate "tariff" as "arancel", never as "tarifa".
+- Use formal "usted" instead of informal "tú".

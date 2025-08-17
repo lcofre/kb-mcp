@@ -1,0 +1,4 @@
+- Prefer less verbose translation.
+- Aim for a total number of characters that would occupy a similar number of pixels on screen, so the website does not look too different when changing the language.
+- Keep the tone of the original text.
+- Do not translate brand names or product names.
